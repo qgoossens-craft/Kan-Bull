@@ -1,5 +1,6 @@
 import { Menu, Notice } from "obsidian";
 import type KanBullPlugin from "../main";
+import { LOGO_DATA_URI } from "../logo";
 import type { Project } from "../models/types";
 import { ColumnComponent } from "./Column";
 import { confirmDialog } from "./ConfirmModal";
@@ -71,10 +72,9 @@ export class Board {
 		// Single compact row: [logo] [title] [divider] [dropdown] [+ button]
 		const row = header.createDiv({ cls: "kan-bull-header-row" });
 
-		// Logo — compact brand mark
+		// Logo — compact brand mark (embedded base64 for BRAT compatibility)
 		const logoImg = row.createEl("img", { cls: "kan-bull-logo-img" });
-		const pluginDir = this.plugin.manifest.dir;
-		logoImg.src = this.plugin.app.vault.adapter.getResourcePath(`${pluginDir}/kan-bull5.png`);
+		logoImg.src = LOGO_DATA_URI;
 		logoImg.alt = "Kan-Bull";
 
 		// Title
