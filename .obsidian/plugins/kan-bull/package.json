@@ -1,0 +1,17 @@
+{
+	"name": "kan-bull",
+	"version": "1.0.0",
+	"description": "A minimalist kanban board plugin for Obsidian",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "node esbuild.config.mjs production"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"esbuild": "^0.24.0",
+		"obsidian": "latest",
+		"tslib": "^2.7.0",
+		"typescript": "^5.6.0"
+	}
+}

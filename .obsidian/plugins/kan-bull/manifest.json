@@ -1,0 +1,9 @@
+{
+	"id": "kan-bull",
+	"name": "Kan-Bull",
+	"version": "1.0.0",
+	"minAppVersion": "1.5.0",
+	"description": "A minimalist kanban board. No dates, no priorities, no bloat.",
+	"author": "Titus",
+	"isDesktopOnly": false
+}

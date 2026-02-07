@@ -1,0 +1,719 @@
+/* Kan-Bull — Minimalist Kanban for Obsidian */
+
+/* Root container */
+.kan-bull-root {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* ─── Header ─── */
+.kan-bull-header {
+	display: flex;
+	flex-direction: column;
+	padding: var(--size-4-2) var(--size-4-4);
+	border-bottom: 1px solid var(--background-modifier-border);
+	flex-shrink: 0;
+	background: var(--background-primary);
+	position: relative;
+}
+
+/* No bottom line — accent lives in the title color */
+
+/* Header row: single compact horizontal bar */
+.kan-bull-header-row {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-4);
+	min-height: 80px;
+}
+
+/* Logo — compact brand mark */
+.kan-bull-logo-img {
+	width: 80px;
+	height: 80px;
+	object-fit: contain;
+	border-radius: var(--radius-m);
+	filter: drop-shadow(0 1px 4px color-mix(in srgb, var(--interactive-accent) 30%, transparent));
+	transition: filter 0.2s ease, transform 0.2s ease;
+	flex-shrink: 0;
+	/* Override Obsidian's global img { margin: auto; display: block } */
+	margin: 0 !important;
+	display: inline-block !important;
+}
+
+.kan-bull-logo-img:hover {
+	filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--interactive-accent) 45%, transparent));
+	transform: scale(1.06);
+}
+
+/* Title — inline next to logo, accent-colored */
+.kan-bull-logo-title {
+	font-size: 1.4em;
+	font-weight: 800;
+	color: var(--interactive-accent);
+	letter-spacing: 0.04em;
+	flex-shrink: 0;
+	line-height: 1;
+}
+
+/* Visual separator between branding and controls */
+.kan-bull-header-divider {
+	width: 1px;
+	height: 40px;
+	background: var(--background-modifier-border);
+	flex-shrink: 0;
+	margin: 0 var(--size-4-1);
+}
+
+/* Project controls row */
+.kan-bull-project-row {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-1);
+}
+
+/* Project selector — compact dropdown trigger */
+.kan-bull-project-dropdown {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	min-width: 160px;
+	max-width: 280px;
+	height: 36px;
+	padding: 0 var(--size-4-4);
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease;
+	user-select: none;
+}
+
+.kan-bull-project-dropdown:hover {
+	border-color: var(--interactive-accent);
+	background: var(--background-modifier-hover);
+}
+
+.kan-bull-project-dropdown-label {
+	flex: 1;
+	font-size: var(--font-ui-medium);
+	font-weight: 600;
+	color: var(--text-normal);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.kan-bull-project-dropdown-chevron {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	flex-shrink: 0;
+}
+
+/* Dropdown panel */
+.kan-bull-dropdown-panel {
+	position: fixed;
+	z-index: var(--layer-menu);
+	background: var(--background-secondary) !important;
+	border: 1px solid var(--background-modifier-border) !important;
+	border-radius: var(--radius-s);
+	overflow: hidden;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.kan-bull-dropdown-item {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2) var(--size-4-3);
+	font-size: var(--font-ui-small);
+	font-weight: 500;
+	color: var(--text-normal) !important;
+	background: var(--background-secondary) !important;
+	cursor: pointer;
+	transition: background 0.15s ease, border-color 0.15s ease;
+	border-left: 2px solid transparent;
+}
+
+.kan-bull-dropdown-item:hover {
+	background: var(--background-modifier-hover) !important;
+	border-left-color: var(--interactive-accent);
+}
+
+.kan-bull-dropdown-item.is-selected {
+	background: var(--background-secondary) !important;
+}
+
+.kan-bull-dropdown-check {
+	width: 1em;
+	text-align: center;
+	flex-shrink: 0;
+	color: var(--interactive-accent);
+}
+
+/* New project button — compact circle */
+.kan-bull-add-project {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	font-size: var(--font-ui-small);
+	border-radius: var(--radius-s);
+	color: var(--text-muted);
+	flex-shrink: 0;
+	transition: color 0.15s ease, background 0.15s ease;
+}
+
+.kan-bull-add-project:hover {
+	color: var(--interactive-accent);
+	background: var(--background-modifier-hover);
+}
+
+/* Add Column button — pill style */
+.kan-bull-add-column-btn {
+	font-size: var(--font-ui-small);
+	padding: var(--size-4-1) var(--size-4-3);
+	border-radius: var(--radius-l);
+	color: var(--text-muted);
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+	align-self: flex-start;
+	transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.kan-bull-add-column-btn:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+	border-color: var(--interactive-accent);
+}
+
+/* Columns container */
+.kan-bull-columns {
+	display: flex;
+	gap: var(--size-4-3);
+	padding: var(--size-4-4);
+	overflow-x: auto;
+	flex: 1;
+	align-items: stretch;
+}
+
+/* Single column */
+/* Dracula palette for columns */
+.kan-bull-column {
+	--col-accent: #8be9fd; /* default: cyan */
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	min-width: 300px;
+	flex-shrink: 0;
+	flex-grow: 1;
+	background: var(--background-secondary);
+	border-radius: var(--radius-m);
+	border: 1px solid var(--background-modifier-border);
+	border-top: 3px solid var(--col-accent);
+	overflow: hidden;
+}
+
+/* Per-column Dracula colors */
+.kan-bull-column:nth-child(1) { --col-accent: #8be9fd; } /* Cyan */
+.kan-bull-column:nth-child(2) { --col-accent: #bd93f9; } /* Purple */
+.kan-bull-column:nth-child(3) { --col-accent: #ffb86c; } /* Orange */
+.kan-bull-column:nth-child(4) { --col-accent: #ff79c6; } /* Pink */
+.kan-bull-column:nth-child(5) { --col-accent: #f1fa8c; } /* Yellow */
+.kan-bull-column:nth-child(6) { --col-accent: #50fa7b; } /* Green */
+.kan-bull-column:nth-child(7) { --col-accent: #ff5555; } /* Red */
+.kan-bull-column:nth-child(8) { --col-accent: #6272a4; } /* Comment */
+
+.kan-bull-column-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--size-4-2) var(--size-4-3);
+	border-bottom: 1px solid var(--background-modifier-border);
+	user-select: none;
+}
+
+.kan-bull-column-title {
+	font-weight: 600;
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+	cursor: default;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.kan-bull-column-count {
+	font-size: var(--font-ui-smaller);
+	font-weight: 700;
+	color: #282a36;
+	background: var(--col-accent);
+	border-radius: var(--radius-l);
+	padding: 1px var(--size-4-2);
+	min-width: 22px;
+	text-align: center;
+	line-height: 1.4;
+}
+
+/* Ticket list (drop zone) */
+.kan-bull-ticket-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2) var(--size-4-2);
+	min-height: 40px;
+	flex: 1;
+}
+
+.kan-bull-ticket-list.kan-bull-drop-active {
+	background: color-mix(in srgb, var(--interactive-accent) 8%, transparent);
+	border-radius: var(--radius-s);
+}
+
+/* Ticket card */
+.kan-bull-ticket-card {
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	padding: var(--size-4-3) var(--size-4-4);
+	cursor: grab;
+	transition: box-shadow 0.15s ease, opacity 0.15s ease;
+	position: relative;
+	min-height: 48px;
+}
+
+.kan-bull-ticket-card:hover {
+	background: var(--background-modifier-hover);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.kan-bull-ticket-card:active {
+	cursor: grabbing;
+}
+
+.kan-bull-ticket-card.kan-bull-dragging {
+	opacity: 0.4;
+}
+
+.kan-bull-ticket-title {
+	font-size: var(--font-ui-medium);
+	color: var(--text-normal);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.kan-bull-ticket-desc {
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-top: var(--size-4-1);
+}
+
+.kan-bull-ticket-source {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--text-accent);
+	position: absolute;
+	top: var(--size-4-2);
+	right: var(--size-4-2);
+}
+
+/* Add ticket button */
+.kan-bull-add-ticket {
+	padding: var(--size-4-2) var(--size-4-3);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	cursor: pointer;
+	border-top: 1px solid var(--background-modifier-border);
+	text-align: center;
+}
+
+.kan-bull-add-ticket:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+	border-radius: 0 0 var(--radius-m) var(--radius-m);
+}
+
+/* Inline input (used for rename & add ticket) */
+.kan-bull-inline-input {
+	width: 100%;
+	background: var(--background-primary);
+	border: 1px solid var(--interactive-accent);
+	border-radius: var(--radius-s);
+	padding: var(--size-4-1) var(--size-4-2);
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+	outline: none;
+}
+
+/* Empty state */
+.kan-bull-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	gap: var(--size-4-2);
+	color: var(--text-muted);
+}
+
+.kan-bull-empty h2 {
+	color: var(--text-normal);
+	margin: 0;
+}
+
+.kan-bull-empty p {
+	margin: 0;
+}
+
+/* ─── Modal base ─── */
+.kan-bull-ticket-modal,
+.kan-bull-project-modal,
+.kan-bull-send-modal {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-4);
+}
+
+/* ─── Title input — hero field ─── */
+.kan-bull-modal-title-input {
+	width: 100%;
+	font-size: var(--font-ui-large);
+	font-weight: 700;
+	background: var(--background-secondary);
+	border: 2px solid var(--interactive-accent) !important;
+	border-radius: var(--radius-s);
+	padding: var(--size-4-3) var(--size-4-4);
+	color: var(--text-normal);
+	transition: box-shadow 0.15s ease;
+}
+
+.kan-bull-modal-title-input:focus {
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 25%, transparent);
+	outline: none !important;
+}
+
+/* Hide the X close button on Kan-Bull modals */
+.modal:has(.kan-bull-ticket-modal) .modal-close-button,
+.modal:has(.kan-bull-confirm-modal) .modal-close-button,
+.modal:has(.kan-bull-project-modal) .modal-close-button,
+.modal:has(.kan-bull-send-modal) .modal-close-button {
+	display: none;
+}
+
+/* ─── Field groups ─── */
+.kan-bull-modal-field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-1);
+}
+
+.kan-bull-modal-label {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+/* ─── Body layout ─── */
+.kan-bull-modal-body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-4);
+}
+
+.kan-bull-modal-sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-3);
+}
+
+/* ─── Description textarea ─── */
+.kan-bull-modal-desc-input {
+	width: 100%;
+	min-height: 100px;
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	padding: var(--size-4-2) var(--size-4-3);
+	color: var(--text-normal);
+	font-family: inherit;
+	font-size: var(--font-ui-small);
+	resize: vertical;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kan-bull-modal-desc-input:focus {
+	border-color: var(--interactive-accent);
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 20%, transparent);
+	outline: none;
+}
+
+.kan-bull-modal-desc-input::placeholder {
+	color: var(--text-faint);
+}
+
+/* ─── Source link ─── */
+.kan-bull-modal-source-link {
+	color: var(--text-accent);
+	cursor: pointer;
+	font-size: var(--font-ui-small);
+}
+
+.kan-bull-modal-source-link:hover {
+	text-decoration: underline;
+}
+
+/* ─── Footer ─── */
+.kan-bull-modal-footer {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding-top: var(--size-4-3);
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+/* ─── Delete button (ghost → filled on hover) ─── */
+.kan-bull-delete-btn {
+	padding: var(--size-4-1) var(--size-4-3) !important;
+	border-radius: var(--radius-s) !important;
+	background-color: transparent !important;
+	border: 1px solid var(--text-error) !important;
+	color: var(--text-error) !important;
+	cursor: pointer !important;
+	font-size: var(--font-ui-smaller) !important;
+	font-weight: 600 !important;
+	box-shadow: none !important;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.kan-bull-delete-btn:hover {
+	background-color: var(--text-error) !important;
+	color: #ffffff !important;
+}
+
+/* Legacy selects (kept for SendToModal) */
+.kan-bull-modal-col-select,
+.kan-bull-modal-select {
+	width: 100%;
+}
+
+.kan-bull-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--size-4-2);
+	margin-top: var(--size-4-2);
+}
+
+/* ─── Confirm Modal ─── */
+.kan-bull-confirm-modal {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-3);
+}
+
+.kan-bull-confirm-message {
+	font-size: var(--font-ui-medium);
+	color: var(--text-normal);
+	margin: 0;
+	line-height: 1.5;
+}
+
+.kan-bull-confirm-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--size-4-2);
+	margin-top: var(--size-4-2);
+}
+
+.kan-bull-confirm-cancel {
+	padding: var(--size-4-2) var(--size-4-4);
+	border-radius: var(--radius-s);
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	color: var(--text-normal);
+	cursor: pointer;
+	font-size: var(--font-ui-small);
+	transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.kan-bull-confirm-cancel:hover {
+	background: var(--background-modifier-hover);
+	border-color: var(--interactive-accent);
+}
+
+.kan-bull-confirm-cancel:focus {
+	outline: none;
+	border-color: var(--interactive-accent);
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 25%, transparent);
+}
+
+.kan-bull-confirm-ok {
+	padding: var(--size-4-2) var(--size-4-4);
+	border-radius: var(--radius-s);
+	background: var(--text-error);
+	border: 1px solid var(--text-error);
+	color: #ffffff !important;
+	cursor: pointer;
+	font-size: var(--font-ui-small);
+	font-weight: 600;
+	transition: opacity 0.15s ease;
+}
+
+.kan-bull-confirm-ok:hover {
+	opacity: 0.85;
+}
+
+.kan-bull-confirm-ok:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--text-error) 35%, transparent);
+}
+
+/* ─── Custom Select (dropdown replacement) ─── */
+.kan-bull-custom-select {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	width: 100%;
+	padding: var(--size-4-2) var(--size-4-3);
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease;
+	user-select: none;
+}
+
+.kan-bull-custom-select:hover {
+	border-color: var(--interactive-accent);
+	background: var(--background-modifier-hover);
+}
+
+.kan-bull-custom-select-label {
+	flex: 1;
+	font-size: var(--font-ui-medium);
+	color: var(--text-normal);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.kan-bull-custom-select-chevron {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	flex-shrink: 0;
+}
+
+/* Select panel (dropdown list) */
+.kan-bull-select-panel {
+	position: fixed;
+	z-index: var(--layer-menu);
+	background: var(--background-secondary) !important;
+	border: 1px solid var(--background-modifier-border) !important;
+	border-radius: var(--radius-s);
+	overflow: hidden;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.kan-bull-select-item {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2) var(--size-4-3);
+	font-size: var(--font-ui-medium);
+	color: var(--text-normal) !important;
+	background: var(--background-secondary) !important;
+	cursor: pointer;
+	transition: background 0.15s ease;
+	border-left: 2px solid transparent;
+}
+
+.kan-bull-select-item:hover {
+	background: var(--background-modifier-hover) !important;
+	border-left-color: var(--interactive-accent);
+}
+
+.kan-bull-select-item.is-selected {
+	background: var(--background-secondary) !important;
+}
+
+.kan-bull-select-check {
+	width: 1em;
+	text-align: center;
+	flex-shrink: 0;
+	color: var(--interactive-accent);
+}
+
+/* ─── Batch Send Modal ─── */
+.kan-bull-send-task-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-1);
+	max-height: 300px;
+	overflow-y: auto;
+	padding: var(--size-4-2) 0;
+}
+
+.kan-bull-send-task-row {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-4-1) var(--size-4-2);
+	border-radius: var(--radius-s);
+	background: var(--background-secondary);
+}
+
+.kan-bull-send-task-row:hover {
+	background: var(--background-modifier-hover);
+}
+
+.kan-bull-send-task-check {
+	flex-shrink: 0;
+	accent-color: var(--interactive-accent);
+}
+
+.kan-bull-send-task-title {
+	flex: 1;
+	background: transparent;
+	border: none;
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
+	padding: var(--size-4-1);
+	outline: none;
+}
+
+.kan-bull-send-task-title:focus {
+	background: var(--background-primary);
+	border-radius: var(--radius-s);
+}
+
+.kan-bull-send-toggle-row {
+	display: flex;
+	gap: var(--size-4-2);
+	margin-top: var(--size-4-1);
+}
+
+.kan-bull-send-toggle-btn {
+	padding: var(--size-4-1) var(--size-4-3);
+	border-radius: var(--radius-s);
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	cursor: pointer;
+	font-size: var(--font-ui-smaller);
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.kan-bull-send-toggle-btn:hover {
+	color: var(--text-normal);
+	border-color: var(--interactive-accent);
+}
