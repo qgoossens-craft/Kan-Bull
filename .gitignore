@@ -1,24 +1,8 @@
 # Dependencies
 node_modules/
 
-# Build output (regenerated from src/)
-.obsidian/plugins/kan-bull/main.js
-
-# Obsidian workspace/cache
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-.obsidian/app.json
-.obsidian/appearance.json
-.obsidian/core-plugins.json
-.obsidian/core-plugins-migration.json
-.obsidian/community-plugins.json
-.obsidian/hotkeys.json
-.obsidian/graph.json
-.obsidian/bookmarks.json
-.obsidian/types.json
-
-# Plugin data (user-specific kanban data)
-.obsidian/plugins/kan-bull/data.json
+# Build output (regenerated via npm run build)
+main.js
 
 # OS files
 .DS_Store
